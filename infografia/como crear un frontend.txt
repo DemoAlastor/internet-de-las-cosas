@@ -1,0 +1,3 @@
+////////////pasos para crear un frontend///////////////
+
+1. para crear un backend se inicia con el comando: npx create-react-app <<nombre de la app>>

@@ -1,0 +1,121 @@
+////////////pasos para crear un backend///////////////
+
+1. enecutamos el comando: npm init
+2. instalamos dependencias con el comando:
+    npm i express nodemon mongoose cors morgan body-parser bcryptjs jsonwebtoken dotenv
+3. en el package.json como scrip colocamos el comando: "dev": "nodemon src/index.js"
+4. creamos una carpeta llamada "src" que es la carpeta contenedora de todo el backend
+5. dentro de la carpeta "src" creamos las carpetas: "controller", "site", "helper", "models", 
+    "routes" y dos archivos: "database.js" e "index.js"
+
+////////////pasos para configurar el index.js///////////////
+
+1. se agregan las dependencias necesarias:
+    const express = require('express');
+    const morgan = require('morgan');
+    const cors = require('cors');
+    const bodyparser = require('body-parser');
+    const dotenv = require("dotenv").config("../");
+    const NODE_ENV = process.env.NODE_ENV
+    const PORT = process.env.PORT
+    const app = express()
+2. se configura el puerto de conexion:
+    app.set('Port', PORT || 4000)
+3. usamos las dependencias instaladas:
+    app.use(morgan('dev'))
+    app.use(bodyparser.urlencoded({extended:true}))
+    app.use(bodyparser.json())
+    app.use(cors({origen: '*'}))
+4. ponemos a escuchar nuestro servidor:
+    app.listen(app.get('Port'),()=>{
+    console.log('escuchando por el puerto', app.get('Port'))
+    })
+5. codigo de produccion o funcionando
+    if(NODE_ENV === "production"){
+        app.use(express.static(`${__dirname}/site/`))
+        app.use("*", (req, res) =>{
+            res.sendFile(`${__dirname}/site/index.html`)
+        });
+    };
+
+////////////pasos para configurar conectar a mongoose (database.js)///////////////
+////Peticion POST/////
+
+1. se agregan dependencias necesarias:
+    const mongoose = require("mongoose");
+    const dotenv = require("dotenv").config("../");
+    const URI_DB = process.env.URI_DB
+2. realizar la configuracion de base de datos mongoose:
+    mongoose.connect(URI_DB,{
+    useNewUrlParser:true,
+    useUnifiedTopology: true
+    })
+    .then(db => console.log('onexion con la base satisfactoria con la base', db.connection.name))
+    .catch(err => console.log(err))
+3. exporta el modulo realizado:
+    module.exports = mongoose
+4. en el index.js requerimos el modulo creado en la seccion de dependencias:
+    require('./database')
+5. en la carpeta modulos creamos el esquema de datos a solicitar o enviar para la base de datos.
+    ejemplo: "ModeloUsuarios.js"
+6. en el esquema creado importamos las dependencias necesarias:
+    const mongoose = require('mongoose');
+7. creamos el esquema de datos de la base de datos.
+    const UserSchema = new mongoose.Schema({
+    nombre: String,
+    correo: String,
+    clave: String,
+    tipo: {type: String, default:'usuario'}
+    },{
+        timestamps:{ createdAt: 'creado', updatedAt: 'modificado' }, //añade cuando se crea y modifica
+        versionKey:false //quita la version en mongoose
+    });
+8. en la carpeta "Controller" creamos el controlador de peticiones a la base de datos:
+    ejemplo: "controlUsuarios.js"
+9. en el controlador importamos las dependencias necesarias:
+    const adminCtrl = {}
+    const Admin = require ('../models/ModeloUsuario.js')
+    const bcrypt = require('bcryptjs');
+    const jws = require('jsonwebtoken');
+10. creamos el controlador:
+    ejemplo:
+    adminCtrl.crear = async (req, res) => {
+        const {nombre, correo, cedula, clave} = req.body
+        const NuevoAdmin = new Admin({
+            nombre,
+            correo,
+            cedula,
+            clave
+        })
+        const correoAdmin = await Admin.findOne({correo: correo})
+        const cedulaAdmin = await Admin.findOne({cedula: cedula})
+        if(correoAdmin){res.json({memsaje: 'el correo ya existe'})}
+        if(cedulaAdmin){res.json({memsaje: 'la cedula ya existe'})}
+        if(correoAdmin == false && cedulaAdmin == false){
+            NuevoAdmin.clave = await bcrypt.hash(clave, 10)
+            const token = jws.sign({_id:NuevoAdmin._id}, 'Secreta')
+            await NuevoAdmin.save()
+            res.json({
+                mensaje: 'Bienvenido',
+                id: NuevoAdmin._id,
+                nombre: NuevoAdmin.nombre,
+                token
+            })
+        }
+    }
+11. Exportamos el Modulo:
+    module.exports = adminCtrl
+12. en la carpeta "routes" creamos las rutas de peticiones a la base.
+    ejemplo: "RouteUsuarios.js"
+13. importamos las dependencias Necesarias
+    const {Router} = require('express')
+    const router = Router()
+    const UsuarioCtrl = require('../controller/ControlUsuarios.js')
+14. Creamos la ruta al controlador
+    router.post('/crear', UsuarioCtrl.crear)
+15. Exportamos el modulo
+    module.exports = router
+16. en el "index.js" creamos la ruta en su propia seccion.
+    ejemplo: 
+    //Rutas
+    app.use('/usuario', require('./routes/RouteUsuario'))

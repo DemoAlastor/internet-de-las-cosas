@@ -1,0 +1,12 @@
+///////////backend////////
+- express: es el encargado de las peticiones get, post, put o delete.
+- nodemon: esta pendiente de los cambios realizados en el codigo y reinicia el 
+    servidor al guardarlo para visualizar los cambios.
+- mongoose: conexion con la base mongoose de internet.
+- cors: esta da permisos a las peticiones de las paginas, ejemplo: solo x link puede hacer peticiones get.
+- morgan: muestra las peticiones realizadas y las arroja como: 
+    peticion/ ruta / codigo de respuesta / tiempo de respuesta.
+- body-parser: lee o escribe en el cuerpo de peticiones.
+- bcryptjs: encripta contraseñas.
+- jsonwebtoken: encripta toda la comunicacion realizada.
+- dotenv: archivo de solo lectura para guardar informacion delicada que no se sube a la web.

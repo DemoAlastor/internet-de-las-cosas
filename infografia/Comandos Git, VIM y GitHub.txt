@@ -1,0 +1,61 @@
+usuario:	sebastian.dario458@gmail.com
+contraseña: 	fara9498
+token total:	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
+
+
+-git init	//inicializa git
+-git status -s 	//estatus de los archivos:
+	? = Reconocido pero no
+	A = Agregado y en seguimiento
+-git add nombredelarchivo.extencion	//Agrega el seguimiento al archivo(si se coloca "add ." agrega a todos a seguimiento)
+-git commit -m "descripcion del archivo"	//guarda el punto de control de los archivos en seguimiento
+-git commit -am "descripcion del archivo"	//realiza los comandos add y commit al mismo tiempo
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//NOTA: si es la primera vez que realiza commit se debe ingrezar el nombre (username) y el correo (mail)//
+//git config --global user.username "nombre"								//
+//git config --global user.mail "correo"								//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+-git log --oneline	//muestra todos los puntos de contro realizados con su codigo
+-git reset --hard codigodepuntodecontrol	//realiza la restauracion al punto de control indicado
+-git ignore nombredelarchivo.extencion	//ignora del seguimiento a un archivo
+//////////////////////////
+//Abrir editor VIM	//
+//////////////////////////
+*-*el editor VIM sirve para modificar los puntos de control*-*
+-git commit -- amend	//abrela consola VIM
+-:i	//inicio de edicion
+-:wq	//salir del editor y guardar
+
+
+/////////////
+////GitHub///
+/////////////
+
+/////////////////////////////////////////////////////
+///…or create a new repository on the command line///
+/////////////////////////////////////////////////////
+echo "# AppRestaurante" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/DemoAlastor/AppRestaurante.git
+git push -u origin main
+////////////////////////////////////////////////////////////
+////…or push an existing repository from the command line///
+////////////////////////////////////////////////////////////
+git remote add nombredelremoto https://github.com/DemoAlastor/AppRestaurante.git	//crea acceso directo a un remoto
+git remote rm nombredelremoto	//elimina acceso directo al remoto
+git branch -M main
+git push -u nombredelremoto nombrerama	//subir
+git pull 		//bajar
+git remote -v		//iguala repositorio antes de pullear con el repositorio online
+git tag nombretag -m "comentario tag"
+git push --tags		//sube las tags
+git clone url:degithub(repositorio)	//clona todo los datosde internet a local
+git branch nombredelarama	//crea una rama
+git branch		//muestra las ramas existentes
+git checkout nombredelarama	//cambio de rama
+git merge nombredelarama	//se debe realizar desde la rama master y fusiona esta con la rama seleccionada
