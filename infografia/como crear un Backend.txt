@@ -2,7 +2,7 @@
 
 1. enecutamos el comando: npm init
 2. instalamos dependencias con el comando:
-    npm i express nodemon mongoose cors morgan body-parser bcryptjs jsonwebtoken dotenv
+    npm i express nodemon mongoose cors morgan body-parser bcryptjs jsonwebtoken dotenv cookie-parser
 3. en el package.json como scrip colocamos el comando: "dev": "nodemon src/index.js"
 4. creamos una carpeta llamada "src" que es la carpeta contenedora de todo el backend
 5. dentro de la carpeta "src" creamos las carpetas: "controller", "site", "helper", "models", 
@@ -14,6 +14,7 @@
     const express = require('express');
     const morgan = require('morgan');
     const cors = require('cors');
+    const cookieParser = require('cookie-parser');
     const bodyparser = require('body-parser');
     const dotenv = require("dotenv").config("../");
     const NODE_ENV = process.env.NODE_ENV
@@ -26,6 +27,7 @@
     app.use(bodyparser.urlencoded({extended:true}))
     app.use(bodyparser.json())
     app.use(cors({origen: '*'}))
+    app.use(cookieParser())
 4. ponemos a escuchar nuestro servidor:
     app.listen(app.get('Port'),()=>{
     console.log('escuchando por el puerto', app.get('Port'))
@@ -73,38 +75,38 @@
 8. en la carpeta "Controller" creamos el controlador de peticiones a la base de datos:
     ejemplo: "controlUsuarios.js"
 9. en el controlador importamos las dependencias necesarias:
-    const adminCtrl = {}
-    const Admin = require ('../models/ModeloUsuario.js')
-    const bcrypt = require('bcryptjs');
-    const jws = require('jsonwebtoken');
+    const UsModel = require("../models/ModeloUsuario")
+    const bcrypt = require('bcryptjs')
+    const jws = require('jsonwebtoken')
+    const usuario = {}
+    const dotenv = require("dotenv").config("../");
+    const JTW_SECRET = process.env.JTW_SECRET
+    const TiempoExpiracionSegundos = 86400
 10. creamos el controlador:
     ejemplo:
-    adminCtrl.crear = async (req, res) => {
+    usuario.crear = async (req, res) => {
         const {nombre, correo, cedula, clave} = req.body
-        const NuevoAdmin = new Admin({
-            nombre,
-            correo,
-            cedula,
-            clave
-        })
-        const correoAdmin = await Admin.findOne({correo: correo})
-        const cedulaAdmin = await Admin.findOne({cedula: cedula})
-        if(correoAdmin){res.json({memsaje: 'el correo ya existe'})}
-        if(cedulaAdmin){res.json({memsaje: 'la cedula ya existe'})}
-        if(correoAdmin == false && cedulaAdmin == false){
-            NuevoAdmin.clave = await bcrypt.hash(clave, 10)
-            const token = jws.sign({_id:NuevoAdmin._id}, 'Secreta')
-            await NuevoAdmin.save()
-            res.json({
-                mensaje: 'Bienvenido',
-                id: NuevoAdmin._id,
-                nombre: NuevoAdmin.nombre,
-                token
-            })
+        const NuevoUsuario = new UsModel({nombre, correo, cedula, clave})
+        try{
+            const correoDup = await UsModel.findOne({correo: correo})
+            const cedulaDup = await UsModel.findOne({cedula: cedula})
+            if(correoDup && !cedulaDup){res.json({memsaje: 'correo ya registrado'})}
+            if(cedulaDup && !correoDup){res.json({memsaje: 'cedula ya registrada'})}
+            if(correoDup && cedulaDup){res.json({memsaje: 'cedula y correo ya registrados'})}
+            if(!correoDup && !cedulaDup){
+                NuevoUsuario.clave = await bcrypt.hash(clave, 10)
+                const token = jws.sign({_id:NuevoUsuario._id}, JTW_SECRET, {expiresIn: TiempoExpiracionSegundos})
+                await NuevoUsuario.save()
+                res.cookie("jwt", token, {httpOnly: true, maxAge:TiempoExpiracionSegundos*1000})
+                res.status(200).json({mensaje: 'Bienvenido', id: NuevoUsuario._id, nombre: NuevoUsuario.nombre, cedula: NuevoUsuario.cedula, token})
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(400).json(error)
         }
     }
 11. Exportamos el Modulo:
-    module.exports = adminCtrl
+    module.exports = usuario
 12. en la carpeta "routes" creamos las rutas de peticiones a la base.
     ejemplo: "RouteUsuarios.js"
 13. importamos las dependencias Necesarias

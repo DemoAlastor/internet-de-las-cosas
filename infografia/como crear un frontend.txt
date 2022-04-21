@@ -1,3 +1,22 @@
 ////////////pasos para crear un frontend///////////////
 
 1. para crear un backend se inicia con el comando: npx create-react-app <<nombre de la app>>
+2. instalamos dependencias con el comando:
+    npm i express nodemon mongoose cors morgan cookie-parser bcryptjs jsonwebtoken dotenv validator axios bootstrap react-router-dom react-redux @reduxjs/toolkit
+3. (opcional) archivos que no son necesarios y estan por defecto en el proyecto:
+    -logo.svg
+    -reportWebVitals.js
+    -setupTest.js
+    -App.test.js
+    eliminamos del "index.js" las importaciones o llamadas a dichos archivos.
+    eliminamos del "app.css" y del "index.css" todo el codigo.
+    en "app.js" eliminamos todo el contenido de el <div> (manteniendo dicha etiqueta) y la clase del
+    <div>.
+4. importamos bootstrap y router-dom en "app.js":
+    import "bootstrap/dist/css/bootstrap.css";
+    import "bootstrap/dist/js/bootstrap.bundle.js"
+    import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
+5. en la carpeta "src" creamos 3 Carpetas nuevas: "Components", "Pages", "Redux"
+6. dentro de la carpeta "Redux" crear 2 carpetas: "apiCall", "Slices"
+7. en la carpeta "Pages" creamos las paginas que vamos a necesitar.
+8. en la carpeta "Components" creamos los componentes que vamos a necesitar

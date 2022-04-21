@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const bodyparser = require('body-parser');
 const dotenv = require("dotenv").config("../");
 const NODE_ENV = process.env.NODE_ENV
@@ -17,6 +18,7 @@ app.use(morgan('dev'))
 app.use(bodyparser.urlencoded({extended:true}))
 app.use(bodyparser.json())
 app.use(cors({origen: '*'}))
+app.use(cookieParser())
 
 //Rutas
 app.use('/usuario', require('./routes/RouteUsuario'))
