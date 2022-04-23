@@ -2,7 +2,7 @@
 
 1. para crear un backend se inicia con el comando: npx create-react-app <<nombre de la app>>
 2. instalamos dependencias con el comando:
-    npm i express nodemon mongoose cors morgan cookie-parser bcryptjs jsonwebtoken dotenv validator axios bootstrap react-router-dom react-redux @reduxjs/toolkit
+    npm i express nodemon mongoose cors morgan cookie-parser bcryptjs jsonwebtoken dotenv validator axios bootstrap react-bootstrap react-router-dom react-redux @reduxjs/toolkit
 3. (opcional) archivos que no son necesarios y estan por defecto en el proyecto:
     -logo.svg
     -reportWebVitals.js

@@ -6,6 +6,7 @@
 - validator: valida formularios
 - axios: libreria para optimizar peticiones json
 - bootstrap: libreria de CSS
+- react-bootstrap: optimizador de bootstrap para react
 - react-router-dom: permite facilitar crear y utilizar las diferentes pestañas o paginas de navegacion
 
 /////frontend y backend////
