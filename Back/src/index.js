@@ -17,11 +17,14 @@ app.set('Port', PORT || 4000)
 app.use(morgan('dev'))
 app.use(bodyparser.urlencoded({extended:true}))
 app.use(bodyparser.json())
-app.use(cors({origen: '*'}))
+app.use(cors({origin: "http://localhost:3000", optionsSuccessStatus: 200, credentials: true}))
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
 
 //Rutas
 app.use('/usuario', require('./routes/RouteUsuario'))
+app.use('/peticiones', require('./middleware/MiddlewareUsuario'), require('./routes/RoutePeticiones'))
 
 //escucha de nuestro servidor
 app.listen(app.get('Port'),()=>{

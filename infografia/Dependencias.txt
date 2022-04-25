@@ -8,6 +8,7 @@
 - bootstrap: libreria de CSS
 - react-bootstrap: optimizador de bootstrap para react
 - react-router-dom: permite facilitar crear y utilizar las diferentes pestañas o paginas de navegacion
+- react-redux: permite centralizar variables en el codigo
 
 /////frontend y backend////
 - express: es el encargado de las peticiones get, post, put o delete.

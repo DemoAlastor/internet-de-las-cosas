@@ -2,6 +2,7 @@ import React, {useState} from "react"
 import {Form} from 'react-bootstrap'
 import ImputP from '../Components/ImputP'
 import {expresiones} from '../Components/ExpresionesRegulares'
+import { postRegistrar } from '../Services/ServiciosUsuario'
 
 const Registro = () => {
   const [Nombre, cambioNombre] = useState({campo: '', valido: null})
@@ -14,6 +15,20 @@ const Registro = () => {
 
   const OnSubmit = (e) => {
     e.preventDefault();
+    console.log({'nombre': Nombre.campo, 
+    'correo': Correo.campo,
+    'clave': Clave.campo,
+    'cedula': Cedula.campo})
+    postRegistrar({
+      'nombre': Nombre.campo, 
+      'correo': Correo.campo,
+      'clave': Clave.campo,
+      'cedula': Cedula.campo
+    }).then((res) =>{
+      console.log(res)
+    }).catch((err=>{
+      console.log(err)
+    }))
   }
 
   const Validaciones = (e) => {

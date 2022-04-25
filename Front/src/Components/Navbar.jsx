@@ -1,10 +1,12 @@
 import React from "react"
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
+import { postLogoff } from '../Services/ServiciosUsuario'
 
 const NavBar = () => {
     const CerrarSesion = () => {
         console.log('sesion cerrada')
+        postLogoff()
     }
     return (
         <Navbar bg ='dark' variant = 'dark' collapseOnSelect expand ='lg' >
